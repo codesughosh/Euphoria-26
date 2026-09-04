@@ -5,6 +5,16 @@ import Link from "next/link";
 import { useAuth } from "@/lib/firebase/AuthProvider";
 import { greetingFor } from "@/lib/greeting";
 
+function InstagramIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export default function HeroClient() {
   const { user, profile } = useAuth();
   const loggedIn = !!user;
@@ -93,8 +103,11 @@ export default function HeroClient() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.3, duration: 0.6 }}
-        className="mt-10 text-xs tracking-[0.2em] text-[var(--muted)] hover:text-white transition-colors"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className="mt-10 flex items-center gap-2 text-xs tracking-[0.2em] text-[var(--muted)] hover:text-white transition-colors border border-[var(--border)] rounded-full px-4 py-2"
       >
+        <InstagramIcon />
         @euphoria.2o26
       </motion.a>
     </main>
