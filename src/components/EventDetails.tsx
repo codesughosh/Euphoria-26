@@ -1,22 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/firebase/AuthProvider";
-import { CONTACT_PHONE } from "@/lib/contact";
 import ImageSlideshow from "@/components/ImageSlideshow";
 
 const VENUE_MAP_URL = "https://maps.app.goo.gl/sTkLdmbgoZvm7eWZ8";
-
-function BackIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <path d="M15 19l-7-7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 function CalendarIcon() {
   return (
@@ -74,23 +63,8 @@ function CameraIcon() {
   );
 }
 
-function PhoneIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M6.5 3h3l1.5 4.5-2.2 1.8a11 11 0 0 0 5.9 5.9l1.8-2.2L21 14.5v3a2 2 0 0 1-2.2 2C10.4 18.9 5.1 13.6 4.5 5.2A2 2 0 0 1 6.5 3Z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export default function EventDetails() {
   const { user } = useAuth();
-  const router = useRouter();
-  const [showPhone, setShowPhone] = useState(false);
   const ctaHref = user ? "/book" : "/signup";
 
   return (
@@ -104,18 +78,7 @@ export default function EventDetails() {
         <ImageSlideshow />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/10 pointer-events-none" />
 
-        <motion.button
-          whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.92 }}
-          onClick={() => router.back()}
-          aria-label="Go back"
-          className="absolute top-3 left-3 z-10 w-9 h-9 rounded-full bg-black/50 backdrop-blur border border-white/20 flex items-center justify-center text-white"
-        >
-          <BackIcon />
-        </motion.button>
-
-        <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center gap-1">
-          <span className="chrome-text font-bold text-3xl tracking-wide">EUPHORIA</span>
+        <div className="absolute bottom-4 left-0 right-0 flex flex-col items-center">
           <span className="text-xs uppercase tracking-[0.2em] text-white/80">
             North Avenue &middot; Mysuru
           </span>
@@ -208,36 +171,9 @@ export default function EventDetails() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-        className="mt-8 flex flex-col items-center gap-2"
-      >
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.96 }}
-          onClick={() => setShowPhone((v) => !v)}
-          className="text-xs uppercase tracking-wide text-[var(--muted)] hover:text-white transition-colors border border-[var(--border)] rounded-full px-4 py-2 flex items-center gap-2"
-        >
-          <PhoneIcon />
-          Help? Contact Us
-        </motion.button>
-        {showPhone && (
-          <motion.a
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`}
-            className="text-sm text-white underline underline-offset-2"
-          >
-            {CONTACT_PHONE}
-          </motion.a>
-        )}
-      </motion.div>
-
-      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7, duration: 0.5 }}
+        transition={{ delay: 0.6, duration: 0.5 }}
         className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur border-t border-[var(--border)] px-6 py-4"
       >
         <div className="max-w-lg mx-auto flex items-center justify-between gap-4">

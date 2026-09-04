@@ -76,8 +76,8 @@ export default function BookForm() {
       setError("Enter Person 2's name and phone number.");
       return;
     }
-    if (!transactionId) {
-      setError("Enter your transaction ID.");
+    if (!/^\d{12}$/.test(transactionId)) {
+      setError("Enter a valid 12-digit UPI transaction ID.");
       return;
     }
     if (!agreed) {
@@ -193,9 +193,13 @@ export default function BookForm() {
         <FormInput
           id="transaction_id"
           name="transaction_id"
-          label="Transaction / UTR ID"
+          label="Transaction / UTR ID (12-digit UPI ref. no.)"
           required
           autoComplete="off"
+          inputMode="numeric"
+          pattern="\d{12}"
+          maxLength={12}
+          title="12-digit UPI transaction ID"
         />
         <label className="flex items-start gap-2.5 text-xs text-[var(--muted)]">
           <input
