@@ -10,22 +10,31 @@ import {
   query,
   serverTimestamp,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase/client";
-import type { Ticket } from "@/lib/types";
+import type { Ticket, TicketStatus } from "@/lib/types";
 
-export default function AdminQueue() {
+const STATUS_LABEL: Record<TicketStatus, string> = {
+  pending: "Pending",
+  verified: "Verified",
+  rejected: "Rejected",
+  checked_in: "Checked In",
+};
+
+const STATUS_COLOR: Record<TicketStatus, string> = {
+  pending: "var(--warning)",
+  verified: "var(--success)",
+  rejected: "var(--danger)",
+  checked_in: "var(--success)",
+};
+
+export default function AdminTransactions() {
   const [items, setItems] = useState<Ticket[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(
-      collection(db, "tickets"),
-      where("status", "==", "pending"),
-      orderBy("createdAt", "asc")
-    );
+    const q = query(collection(db, "tickets"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
       setItems(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Ticket));
       setLoading(false);
@@ -63,7 +72,7 @@ export default function AdminQueue() {
   }
 
   if (items.length === 0) {
-    return <p className="text-center text-[var(--muted)] text-sm mt-16">No pending tickets. 🎉</p>;
+    return <p className="text-center text-[var(--muted)] text-sm mt-16">No transactions yet.</p>;
   }
 
   return (
@@ -75,7 +84,6 @@ export default function AdminQueue() {
             layout
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, x: -30 }}
             transition={{ duration: 0.3 }}
             className="chrome-border rounded-xl p-4 flex flex-col gap-3"
           >
@@ -92,22 +100,32 @@ export default function AdminQueue() {
                 TXN: <span className="text-white">{t.transactionId}</span>
               </p>
             </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => verify(t.id)}
-                disabled={busyId === t.id}
-                className="flex-1 rounded-lg py-2 text-xs uppercase tracking-wide chrome-btn disabled:opacity-50"
+
+            {t.status === "pending" ? (
+              <div className="flex gap-3">
+                <button
+                  onClick={() => verify(t.id)}
+                  disabled={busyId === t.id}
+                  className="flex-1 rounded-lg py-2 text-xs uppercase tracking-wide chrome-btn disabled:opacity-50"
+                >
+                  Approve
+                </button>
+                <button
+                  onClick={() => reject(t.id)}
+                  disabled={busyId === t.id}
+                  className="flex-1 rounded-lg py-2 text-xs uppercase tracking-wide border border-[var(--danger)] text-[var(--danger)] hover:bg-[var(--danger)]/10 disabled:opacity-50"
+                >
+                  Reject
+                </button>
+              </div>
+            ) : (
+              <span
+                className="text-xs uppercase tracking-wide w-fit"
+                style={{ color: STATUS_COLOR[t.status] }}
               >
-                Approve
-              </button>
-              <button
-                onClick={() => reject(t.id)}
-                disabled={busyId === t.id}
-                className="flex-1 rounded-lg py-2 text-xs uppercase tracking-wide border border-[var(--danger)] text-[var(--danger)] hover:bg-[var(--danger)]/10 disabled:opacity-50"
-              >
-                Reject
-              </button>
-            </div>
+                {STATUS_LABEL[t.status]}
+              </span>
+            )}
           </motion.div>
         ))}
       </AnimatePresence>

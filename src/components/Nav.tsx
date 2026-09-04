@@ -22,7 +22,6 @@ export default function Nav() {
           EUPHORIA
         </Link>
         <nav className="flex items-center gap-4 text-xs uppercase tracking-wide text-[var(--muted)]">
-          <Link href="/credits" className="hover:text-white">Credits</Link>
           {!user && (
             <>
               <Link href="/login" className="hover:text-white">Login</Link>
@@ -31,7 +30,7 @@ export default function Nav() {
           )}
           {user && (
             <>
-              <Link href="/ticket" className="hover:text-white">Ticket</Link>
+              <Link href="/ticket" className="hover:text-white">My Tickets</Link>
               {profile?.isAdmin && <Link href="/admin" className="hover:text-white">Admin</Link>}
               <button onClick={handleLogout} className="hover:text-white">Logout</button>
             </>

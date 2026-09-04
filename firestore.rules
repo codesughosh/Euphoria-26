@@ -12,12 +12,28 @@ service cloud.firestore {
         get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.isAdmin == true;
     }
 
+    function isAccountApproved() {
+      return get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.get('accountStatus', 'approved') == 'approved';
+    }
+
     match /profiles/{uid} {
       allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
+
       allow create: if isSignedIn() && request.auth.uid == uid &&
-        request.resource.data.isAdmin == false;
+        request.resource.data.isAdmin == false &&
+        request.resource.data.year in ['1st', '2nd', '3rd'] &&
+        request.resource.data.accountStatus ==
+          (request.resource.data.year == '1st' ? 'approved' : 'pending');
+
+      // Self-update: cannot touch admin flag or account status
       allow update: if isSignedIn() && request.auth.uid == uid &&
-        request.resource.data.isAdmin == resource.data.isAdmin;
+        request.resource.data.isAdmin == resource.data.isAdmin &&
+        request.resource.data.accountStatus == resource.data.accountStatus;
+
+      // Admin approve/reject a pending account request
+      allow update: if isAdmin() &&
+        resource.data.accountStatus == 'pending' &&
+        request.resource.data.accountStatus in ['approved', 'rejected'];
     }
 
     match /tickets/{ticketId} {
@@ -26,7 +42,8 @@ service cloud.firestore {
       allow create: if isSignedIn() &&
         request.resource.data.userId == request.auth.uid &&
         request.resource.data.status == 'pending' &&
-        request.resource.data.entryType in ['stag', 'couple'];
+        request.resource.data.entryType in ['stag', 'couple'] &&
+        isAccountApproved();
 
       // Admin approve/reject (pending -> verified/rejected) or check-in (verified -> checked_in)
       allow update: if isAdmin() && (

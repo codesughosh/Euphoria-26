@@ -18,6 +18,7 @@ import PageShell from "@/components/PageShell";
 import FormInput from "@/components/FormInput";
 import ChromeButton from "@/components/ChromeButton";
 import EntryTypeSelector from "@/components/EntryTypeSelector";
+import TermsModal from "@/components/TermsModal";
 import type { EntryType } from "@/lib/types";
 
 const ACTIVE_STATUSES = ["pending", "verified", "checked_in"];
@@ -28,6 +29,8 @@ export default function BookForm() {
   const [checking, setChecking] = useState(true);
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -63,6 +66,10 @@ export default function BookForm() {
       setError("Select an entry type.");
       return;
     }
+    if (!agreed) {
+      setError("You must agree to the Terms & Conditions.");
+      return;
+    }
 
     setPending(true);
     try {
@@ -89,6 +96,34 @@ export default function BookForm() {
     return (
       <PageShell className="items-center justify-center">
         <div className="w-6 h-6 rounded-full border-2 border-[var(--chrome-3)] border-t-white animate-spin" />
+      </PageShell>
+    );
+  }
+
+  if (profile?.accountStatus === "pending") {
+    return (
+      <PageShell className="items-center justify-center text-center">
+        <div className="chrome-border rounded-2xl p-8">
+          <h2 className="chrome-text text-xl font-semibold mb-2">Account Pending Approval</h2>
+          <p className="text-xs text-[var(--muted)] max-w-xs">
+            2nd/3rd year accounts need admin approval before booking. We&rsquo;ll notify you once
+            it&rsquo;s reviewed.
+          </p>
+        </div>
+      </PageShell>
+    );
+  }
+
+  if (profile?.accountStatus === "rejected") {
+    return (
+      <PageShell className="items-center justify-center text-center">
+        <div className="chrome-border rounded-2xl p-8">
+          <h2 className="chrome-text text-xl font-semibold mb-2">Registration Not Approved</h2>
+          <p className="text-xs text-[var(--muted)] max-w-xs">
+            Your account request wasn&rsquo;t approved. Contact the organizers if you think this
+            is a mistake.
+          </p>
+        </div>
       </PageShell>
     );
   }
@@ -126,11 +161,32 @@ export default function BookForm() {
           required
           autoComplete="off"
         />
+        <label className="flex items-start gap-2.5 text-xs text-[var(--muted)]">
+          <input
+            type="checkbox"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+            className="mt-0.5 accent-white"
+          />
+          <span>
+            I agree to the{" "}
+            <button
+              type="button"
+              onClick={() => setTermsOpen(true)}
+              className="text-white underline underline-offset-2"
+            >
+              Terms &amp; Conditions
+            </button>
+          </span>
+        </label>
+
         {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
-        <ChromeButton type="submit" loading={pending}>
+        <ChromeButton type="submit" loading={pending} disabled={!agreed}>
           Submit for Verification
         </ChromeButton>
       </form>
+
+      <TermsModal open={termsOpen} onClose={() => setTermsOpen(false)} />
     </PageShell>
   );
 }

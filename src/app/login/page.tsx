@@ -7,6 +7,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase/client";
 import PageShell from "@/components/PageShell";
 import FormInput from "@/components/FormInput";
+import PasswordInput from "@/components/PasswordInput";
 import ChromeButton from "@/components/ChromeButton";
 
 function friendlyError(code: string) {
@@ -53,10 +54,9 @@ export default function LoginPage() {
       </h2>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <FormInput id="email" name="email" type="email" label="Email" required autoComplete="email" />
-        <FormInput
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           label="Password"
           required
           autoComplete="current-password"

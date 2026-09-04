@@ -8,7 +8,16 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase/client";
 import PageShell from "@/components/PageShell";
 import FormInput from "@/components/FormInput";
+import FormSelect from "@/components/FormSelect";
+import PasswordInput from "@/components/PasswordInput";
 import ChromeButton from "@/components/ChromeButton";
+import type { Year } from "@/lib/types";
+
+const YEAR_OPTIONS = [
+  { value: "1st", label: "1st Year" },
+  { value: "2nd", label: "2nd Year" },
+  { value: "3rd", label: "3rd Year" },
+];
 
 function friendlyError(code: string) {
   if (code.includes("email-already-in-use")) return "An account with this email already exists.";
@@ -28,11 +37,17 @@ export default function SignupPage() {
     const formData = new FormData(e.currentTarget);
     const name = String(formData.get("name") || "").trim();
     const phone = String(formData.get("phone") || "").trim();
+    const usn = String(formData.get("usn") || "").trim();
+    const year = String(formData.get("year") || "") as Year;
     const email = String(formData.get("email") || "").trim();
     const password = String(formData.get("password") || "");
 
-    if (!name || !phone || !email || !password) {
+    if (!name || !phone || !usn || !email || !password) {
       setError("All fields are required.");
+      return;
+    }
+    if (year !== "1st" && year !== "2nd" && year !== "3rd") {
+      setError("Select your year.");
       return;
     }
 
@@ -43,6 +58,9 @@ export default function SignupPage() {
         email,
         name,
         phone,
+        usn,
+        year,
+        accountStatus: year === "1st" ? "approved" : "pending",
         isAdmin: false,
         createdAt: serverTimestamp(),
       });
@@ -62,11 +80,12 @@ export default function SignupPage() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <FormInput id="name" name="name" label="Full Name" required autoComplete="name" />
         <FormInput id="phone" name="phone" label="Phone Number" required autoComplete="tel" />
+        <FormInput id="usn" name="usn" label="USN" required autoComplete="off" />
+        <FormSelect id="year" name="year" label="Year" required options={YEAR_OPTIONS} />
         <FormInput id="email" name="email" type="email" label="Email" required autoComplete="email" />
-        <FormInput
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           label="Password"
           required
           minLength={6}

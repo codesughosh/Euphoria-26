@@ -32,9 +32,11 @@ These are safe to expose client-side — Firebase web apps are secured by Firest
 Replace [`public/payment-qr.png`](public/payment-qr.png) (currently a placeholder) with your real UPI/payment QR image, same filename. Update the prices in [`src/components/EntryTypeSelector.tsx`](src/components/EntryTypeSelector.tsx).
 
 ## 4. Make yourself admin
-Sign up once through the app, then in **Firestore → Data → profiles → `<your uid>`**, edit the `isAdmin` field to `true` (find your uid under **Authentication → Users**).
+Sign up once through the app (pick 1st year so your own account isn't gated), then in **Firestore → Data → profiles → `<your uid>`**, edit the `isAdmin` field to `true` (find your uid under **Authentication → Users**).
 
-Admins get access to `/admin` (verify queue) and `/admin/scan` (QR check-in scanner).
+Admins get access to `/admin` (Transactions + Account Requests tabs) and `/admin/scan` (QR check-in scanner).
+
+> Rules changed since first deploy (account-approval gating) — re-paste [`firestore.rules`](firestore.rules) into **Firestore → Rules → Publish** if you set this up before.
 
 ## 5. Run
 
@@ -44,8 +46,9 @@ npm run dev
 ```
 
 ## Flow
-- **Guest**: sign up → `/book` (scan QR, pick Stag/Couple, submit transaction ID) → `/ticket` (pending → verified QR / rejected), updates live.
-- **Admin**: `/admin` approves/rejects pending tickets → `/admin/scan` scans the QR at the door; check-in runs as a Firestore transaction (`verified → checked_in`), so a QR can't be reused once scanned, even with two scanners going at once.
+- **Guest**: `/event` (venue, timings, what's there) → sign up (name, USN, year, phone, email, password) → `/book` (scan QR, pick Stag/Couple, submit transaction ID, agree to terms) → `/ticket` (pending → verified QR / rejected), updates live.
+- **Account approval**: 1st years are auto-approved. 2nd/3rd years are created as `pending` and blocked from booking until an admin approves them under `/admin` → **Account Requests** — enforced by Firestore rules, not just the UI.
+- **Admin**: `/admin` → **Transactions** tab approves/rejects pending ticket payments, **Account Requests** tab approves/rejects pending 2nd/3rd year signups (both list everyone, with one-click actions on pending rows) → `/admin/scan` scans the QR at the door; check-in runs as a Firestore transaction (`verified → checked_in`), so a QR can't be reused once scanned, even with two scanners going at once.
 
 ## Deploy
 
