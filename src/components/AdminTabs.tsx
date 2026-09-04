@@ -3,10 +3,12 @@
 import { useState } from "react";
 import AdminTransactions from "@/components/AdminTransactions";
 import AdminAccountRequests from "@/components/AdminAccountRequests";
+import AdminCheckedIn from "@/components/AdminCheckedIn";
 
 const TABS = [
   { id: "transactions", label: "Transactions" },
   { id: "accounts", label: "Account Requests" },
+  { id: "checkedin", label: "Checked In" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -16,7 +18,7 @@ export default function AdminTabs() {
 
   return (
     <div>
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-2 mb-6 flex-wrap">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -31,7 +33,9 @@ export default function AdminTabs() {
           </button>
         ))}
       </div>
-      {active === "transactions" ? <AdminTransactions /> : <AdminAccountRequests />}
+      {active === "transactions" && <AdminTransactions />}
+      {active === "accounts" && <AdminAccountRequests />}
+      {active === "checkedin" && <AdminCheckedIn />}
     </div>
   );
 }
