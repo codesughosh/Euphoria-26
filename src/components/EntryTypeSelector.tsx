@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import type { EntryType } from "@/lib/types";
 
@@ -10,29 +9,28 @@ const options: { value: EntryType; label: string; price: string }[] = [
 ];
 
 export default function EntryTypeSelector({
-  name = "entry_type",
-  defaultValue = "stag",
+  value,
+  onChange,
 }: {
-  name?: string;
-  defaultValue?: EntryType;
+  value: EntryType | null;
+  onChange: (value: EntryType) => void;
 }) {
-  const [selected, setSelected] = useState<EntryType>(defaultValue);
-
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs uppercase tracking-widest text-[var(--muted)]">
         Entry Type
       </span>
-      <input type="hidden" name={name} value={selected} />
       <div className="grid grid-cols-2 gap-3">
         {options.map((opt) => {
-          const active = selected === opt.value;
+          const active = value === opt.value;
           return (
             <motion.button
               key={opt.value}
               type="button"
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setSelected(opt.value)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              onClick={() => onChange(opt.value)}
               className={`relative rounded-xl py-3 px-4 text-left border transition-colors ${
                 active
                   ? "border-transparent"

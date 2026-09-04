@@ -18,6 +18,7 @@ import PageShell from "@/components/PageShell";
 import FormInput from "@/components/FormInput";
 import ChromeButton from "@/components/ChromeButton";
 import EntryTypeSelector from "@/components/EntryTypeSelector";
+import AttendeeFields from "@/components/AttendeeFields";
 import TermsModal from "@/components/TermsModal";
 import type { EntryType } from "@/lib/types";
 
@@ -31,6 +32,12 @@ export default function BookForm() {
   const [pending, setPending] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
+
+  const [entryType, setEntryType] = useState<EntryType | null>(null);
+  const [attendee1Name, setAttendee1Name] = useState(profile?.name ?? "");
+  const [attendee1Phone, setAttendee1Phone] = useState(profile?.phone ?? "");
+  const [attendee2Name, setAttendee2Name] = useState("");
+  const [attendee2Phone, setAttendee2Phone] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -56,20 +63,35 @@ export default function BookForm() {
 
     const formData = new FormData(e.currentTarget);
     const transactionId = String(formData.get("transaction_id") || "").trim();
-    const entryType = String(formData.get("entry_type") || "") as EntryType;
 
-    if (!transactionId) {
-      setError("Enter your transaction ID.");
+    if (!entryType) {
+      setError("Select an entry type.");
       return;
     }
-    if (entryType !== "stag" && entryType !== "couple") {
-      setError("Select an entry type.");
+    if (!attendee1Name.trim() || !attendee1Phone.trim()) {
+      setError("Enter the attendee's name and phone number.");
+      return;
+    }
+    if (entryType === "couple" && (!attendee2Name.trim() || !attendee2Phone.trim())) {
+      setError("Enter Person 2's name and phone number.");
+      return;
+    }
+    if (!transactionId) {
+      setError("Enter your transaction ID.");
       return;
     }
     if (!agreed) {
       setError("You must agree to the Terms & Conditions.");
       return;
     }
+
+    const attendees =
+      entryType === "couple"
+        ? [
+            { name: attendee1Name.trim(), phone: attendee1Phone.trim() },
+            { name: attendee2Name.trim(), phone: attendee2Phone.trim() },
+          ]
+        : [{ name: attendee1Name.trim(), phone: attendee1Phone.trim() }];
 
     setPending(true);
     try {
@@ -78,6 +100,7 @@ export default function BookForm() {
         name: profile.name,
         email: profile.email,
         phone: profile.phone,
+        attendees,
         transactionId,
         entryType,
         status: "pending",
@@ -153,7 +176,20 @@ export default function BookForm() {
       </motion.div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <EntryTypeSelector />
+        <EntryTypeSelector value={entryType} onChange={setEntryType} />
+
+        <AttendeeFields
+          entryType={entryType}
+          attendee1Name={attendee1Name}
+          attendee1Phone={attendee1Phone}
+          attendee2Name={attendee2Name}
+          attendee2Phone={attendee2Phone}
+          onAttendee1NameChange={setAttendee1Name}
+          onAttendee1PhoneChange={setAttendee1Phone}
+          onAttendee2NameChange={setAttendee2Name}
+          onAttendee2PhoneChange={setAttendee2Phone}
+        />
+
         <FormInput
           id="transaction_id"
           name="transaction_id"

@@ -24,7 +24,9 @@ export default function ChromeButton({
 
   return (
     <motion.button
+      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 400, damping: 20 }}
       className={`${base} ${styles} ${className}`}
       disabled={disabled || loading}
       {...props}

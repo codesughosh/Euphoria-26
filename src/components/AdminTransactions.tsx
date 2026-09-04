@@ -96,6 +96,19 @@ export default function AdminTransactions() {
               </div>
               <p className="text-xs text-[var(--muted)]">{t.email}</p>
               <p className="text-xs text-[var(--muted)]">{t.phone}</p>
+              {t.attendees?.length > 0 && (
+                <div className="text-xs mt-2 space-y-0.5">
+                  {t.attendees.map((a, i) => (
+                    <p key={i}>
+                      <span className="text-[var(--muted)]">
+                        {t.attendees.length > 1 ? `Person ${i + 1}: ` : "Attendee: "}
+                      </span>
+                      <span className="text-white">{a.name}</span>{" "}
+                      <span className="text-[var(--muted)]">({a.phone})</span>
+                    </p>
+                  ))}
+                </div>
+              )}
               <p className="text-xs mt-2 tracking-wide">
                 TXN: <span className="text-white">{t.transactionId}</span>
               </p>

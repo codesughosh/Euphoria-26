@@ -15,12 +15,18 @@ export interface Profile {
   createdAt: number;
 }
 
+export interface Attendee {
+  name: string;
+  phone: string;
+}
+
 export interface Ticket {
   id: string;
   userId: string;
   name: string;
   email: string;
   phone: string;
+  attendees: Attendee[];
   transactionId: string;
   entryType: EntryType;
   status: TicketStatus;
