@@ -34,6 +34,8 @@ service cloud.firestore {
       allow update: if isAdmin() &&
         resource.data.accountStatus == 'pending' &&
         request.resource.data.accountStatus in ['approved', 'rejected'];
+
+      allow delete: if isAdmin();
     }
 
     match /tickets/{ticketId} {
@@ -50,6 +52,8 @@ service cloud.firestore {
         (resource.data.status == 'pending' && request.resource.data.status in ['verified', 'rejected']) ||
         (resource.data.status == 'verified' && request.resource.data.status == 'checked_in')
       );
+
+      allow delete: if isAdmin();
     }
   }
 }
