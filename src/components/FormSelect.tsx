@@ -11,7 +11,7 @@ export default function FormSelect({ label, id, options, ...props }: FormSelectP
       <label htmlFor={id} className="text-xs uppercase tracking-widest text-[var(--muted)]">
         {label}
       </label>
-      <select id={id} className="rounded-lg px-4 py-3 text-sm w-full" defaultValue="" {...props}>
+      <select id={id} className="rounded-lg px-4 py-3 text-base w-full" defaultValue="" {...props}>
         <option value="" disabled>
           Select
         </option>

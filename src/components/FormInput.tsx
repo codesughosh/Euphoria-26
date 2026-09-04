@@ -14,7 +14,7 @@ export default function FormInput({ label, id, rightElement, ...props }: FormInp
       <div className="relative">
         <input
           id={id}
-          className={`rounded-lg px-4 py-3 text-sm w-full ${rightElement ? "pr-11" : ""}`}
+          className={`rounded-lg px-4 py-3 text-base w-full ${rightElement ? "pr-11" : ""}`}
           {...props}
         />
         {rightElement && (
