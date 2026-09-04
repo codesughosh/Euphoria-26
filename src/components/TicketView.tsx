@@ -55,7 +55,7 @@ export default function TicketView() {
     return (
       <PageShell className="items-center justify-center text-center">
         <p className="text-[var(--muted)] mb-6">You don&rsquo;t have a ticket yet.</p>
-        <Link href="/book" className="chrome-btn rounded-xl px-8 py-3 text-sm uppercase tracking-wide">
+        <Link href="/event" className="chrome-btn rounded-xl px-8 py-3 text-sm uppercase tracking-wide">
           Book Now
         </Link>
       </PageShell>
