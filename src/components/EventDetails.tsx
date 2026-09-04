@@ -95,7 +95,7 @@ export default function EventDetails() {
           Freshers&rsquo; Party
         </span>
         <span className="text-[10px] uppercase tracking-wide bg-[var(--surface-2)] border border-[var(--border)] rounded-full px-3 py-1.5">
-          2020 Batch
+          2030 Batch
         </span>
       </motion.div>
 
