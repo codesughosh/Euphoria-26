@@ -16,6 +16,18 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.get('accountStatus', 'approved') == 'approved';
     }
 
+    function isValidAttendee(a) {
+      return a.name is string && a.name.size() > 0 &&
+        a.phone is string && a.phone.size() > 0;
+    }
+
+    function isValidAttendees(attendees, entryType) {
+      return attendees is list &&
+        attendees.size() == (entryType == 'couple' ? 2 : 1) &&
+        isValidAttendee(attendees[0]) &&
+        (entryType != 'couple' || isValidAttendee(attendees[1]));
+    }
+
     match /profiles/{uid} {
       allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
 
@@ -23,12 +35,16 @@ service cloud.firestore {
         request.resource.data.isAdmin == false &&
         request.resource.data.year in ['1st', '2nd', '3rd'] &&
         request.resource.data.accountStatus ==
-          (request.resource.data.year == '1st' ? 'approved' : 'pending');
+          (request.resource.data.year == '1st' ? 'approved' : 'pending') &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 &&
+        request.resource.data.email is string && request.resource.data.email.size() > 0 &&
+        request.resource.data.phone is string && request.resource.data.phone.size() > 0 &&
+        request.resource.data.usn is string && request.resource.data.usn.size() > 0;
 
-      // Self-update: cannot touch admin flag or account status
-      allow update: if isSignedIn() && request.auth.uid == uid &&
-        request.resource.data.isAdmin == resource.data.isAdmin &&
-        request.resource.data.accountStatus == resource.data.accountStatus;
+      // No self-update path: no feature edits an existing profile except admin
+      // approve/reject below. Editing your own name/email/usn/phone after
+      // creation has no legitimate use and would let a user misrepresent
+      // their identity on tickets, so it's intentionally not allowed.
 
       // Admin approve/reject a pending account request
       allow update: if isAdmin() &&
@@ -45,7 +61,13 @@ service cloud.firestore {
         request.resource.data.userId == request.auth.uid &&
         request.resource.data.status == 'pending' &&
         request.resource.data.entryType in ['stag', 'couple'] &&
-        isAccountApproved();
+        isAccountApproved() &&
+        request.resource.data.transactionId is string &&
+        request.resource.data.transactionId.size() > 0 &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 &&
+        request.resource.data.email is string && request.resource.data.email.size() > 0 &&
+        request.resource.data.phone is string && request.resource.data.phone.size() > 0 &&
+        isValidAttendees(request.resource.data.attendees, request.resource.data.entryType);
 
       // Admin approve/reject (pending -> verified/rejected) or check-in (verified -> checked_in)
       allow update: if isAdmin() && (

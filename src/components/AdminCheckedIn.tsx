@@ -67,7 +67,7 @@ export default function AdminCheckedIn() {
                 {t.entryType}
               </span>
             </div>
-            {t.attendees?.length > 0 && (
+            {Array.isArray(t.attendees) && t.attendees.length > 0 && (
               <div className="text-xs space-y-0.5">
                 {t.attendees.map((a, i) => (
                   <p key={i}>

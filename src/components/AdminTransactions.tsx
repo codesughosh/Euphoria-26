@@ -96,7 +96,7 @@ export default function AdminTransactions() {
               </div>
               <p className="text-xs text-[var(--muted)]">{t.email}</p>
               <p className="text-xs text-[var(--muted)]">{t.phone}</p>
-              {t.attendees?.length > 0 && (
+              {Array.isArray(t.attendees) && t.attendees.length > 0 && (
                 <div className="text-xs mt-2 space-y-0.5">
                   {t.attendees.map((a, i) => (
                     <p key={i}>
