@@ -51,11 +51,60 @@ function StoreIcon() {
   );
 }
 
-function MagnetIcon() {
+function MusicIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M6 4v7a6 6 0 0 0 12 0V4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-      <path d="M6 4H3v4h3M18 4h3v4h-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4 14v-2a8 8 0 0 1 16 0v2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <rect x="3" y="14" width="4" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="17" y="14" width="4" height="6" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+    </svg>
+  );
+}
+
+function SparkleIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function DuoIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="8" cy="7" r="2.3" stroke="currentColor" strokeWidth="1.6" />
+      <circle cx="16" cy="7" r="2.3" stroke="currentColor" strokeWidth="1.6" />
+      <path
+        d="M3.5 19c0-3 2-5 4.5-5s4.5 2 4.5 5M11.5 19c0-3 2-5 4.5-5s4.5 2 4.5 5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function GameIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <rect x="3" y="8" width="18" height="10" rx="5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M8 11v4M6 13h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="16" cy="12" r="0.9" fill="currentColor" />
+      <circle cx="18" cy="14" r="0.9" fill="currentColor" />
+    </svg>
+  );
+}
+
+function PolaroidIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <rect x="4" y="3" width="16" height="17" rx="1" stroke="currentColor" strokeWidth="1.6" />
+      <rect x="6.5" y="5.5" width="11" height="9" stroke="currentColor" strokeWidth="1.4" />
     </svg>
   );
 }
@@ -84,10 +133,14 @@ function CameraIcon() {
 }
 
 const AMENITIES = [
+  { Icon: MusicIcon, label: "DJ Night" },
   { Icon: StoreIcon, label: "PebbleCo Store" },
-  { Icon: MagnetIcon, label: "Fridge Magnets" },
-  { Icon: FoodIcon, label: "Food & Drinks" },
+  { Icon: SparkleIcon, label: "Ramp Walk" },
+  { Icon: DuoIcon, label: "Best Couple/Duo" },
+  { Icon: GameIcon, label: "Games & Contests" },
   { Icon: CameraIcon, label: "Photobooth" },
+  { Icon: PolaroidIcon, label: "Polaroid Memory Wall" },
+  { Icon: FoodIcon, label: "Food & Drinks" },
 ];
 
 export default function EventDetails() {
@@ -182,11 +235,10 @@ export default function EventDetails() {
           About The Event
         </h2>
         <p className="text-sm text-white/90 leading-relaxed">
-          Euphoria&rsquo;26 is Aarambh&rsquo;s Freshers&rsquo; Night, an evening of DJ music,
-          games and contests, a ramp walk, a photo dare board, and a polaroid memory wall,
-          capped off with a finale you won&rsquo;t want to miss. Built for this year&rsquo;s
-          incoming batch, sophomores and seniors are welcome to join too, subject to admin
-          approval during registration.
+          Euphoria X Aarambh&rsquo;s Freshers&rsquo; Night &mdash; an evening packed with DJ
+          music, games and contests, a ramp walk, a photo dare board, and a Polaroid memory
+          wall. Explore an exciting accessories store, enjoy food and drinks, strike a pose
+          at the photobooth, and get ready for a finale you won&rsquo;t want to miss!
         </p>
       </motion.div>
 
@@ -223,7 +275,7 @@ export default function EventDetails() {
             <p className="text-[10px] uppercase tracking-wide text-[var(--muted)]">
               Stag / Couple
             </p>
-            <p className="text-sm font-medium">₹950 onwards</p>
+            <p className="text-sm font-medium">₹9XX onwards</p>
           </div>
           {launched ? (
             <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
