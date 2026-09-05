@@ -1,11 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useIsLaunched } from "@/lib/launch";
 import type { EntryType } from "@/lib/types";
 
-const options: { value: EntryType; label: string; price: string }[] = [
-  { value: "stag", label: "Stag", price: "₹950" },
-  { value: "couple", label: "Couple", price: "₹1800" },
+const options: { value: EntryType; label: string; exactPrice: number; maskedPrice: string }[] = [
+  { value: "stag", label: "Stag", exactPrice: 950, maskedPrice: "₹9XX" },
+  { value: "couple", label: "Couple", exactPrice: 1800, maskedPrice: "₹18XX" },
 ];
 
 export default function EntryTypeSelector({
@@ -15,6 +16,8 @@ export default function EntryTypeSelector({
   value: EntryType | null;
   onChange: (value: EntryType) => void;
 }) {
+  const launched = useIsLaunched();
+
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-xs uppercase tracking-widest text-[var(--muted)]">
@@ -57,7 +60,7 @@ export default function EntryTypeSelector({
                   active ? "text-black/70" : "text-[var(--muted)]"
                 }`}
               >
-                {opt.price}
+                {launched ? `₹${opt.exactPrice}` : opt.maskedPrice}
               </span>
             </motion.button>
           );
