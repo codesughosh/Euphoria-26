@@ -49,8 +49,3 @@ export function useCountdown(): Remaining {
 export function useIsLaunched(): boolean {
   return useCountdown().diff <= 0;
 }
-
-// Non-reactive one-off check, for use outside render (e.g. in a submit handler).
-export function isLaunched(): boolean {
-  return Date.now() >= LAUNCH_AT;
-}

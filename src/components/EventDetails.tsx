@@ -41,29 +41,19 @@ function PinIcon() {
   );
 }
 
-function StoreIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d="M4 9l1-5h14l1 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M4 9a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 9v10h14V9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function CameraIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-      <circle cx="12" cy="14" r="3.3" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
-}
+const ACTIVITIES = [
+  { emoji: "🎧", label: "DJ Night" },
+  { emoji: "📸", label: "Photobooth + Instagram Mirror Selfie Zone" },
+  { emoji: "🎮", label: "Live Games & Contests" },
+  { emoji: "👗", label: "Ramp Walk — Win Exciting Prizes" },
+  { emoji: "💑", label: "Best Couple/Duo" },
+  { emoji: "🎞️", label: "Photo Dare Board" },
+  { emoji: "📸", label: "Polaroid Memory Wall" },
+  { emoji: "🧲", label: "Fridge Magnet Making Stall" },
+  { emoji: "🛍️", label: "PebbleCo Accessories Stall" },
+  { emoji: "🍔", label: "Food & Drinks" },
+  { emoji: "🎁", label: "A Finale You Won't Want to Miss" },
+];
 
 export default function EventDetails() {
   const { user } = useAuth();
@@ -157,9 +147,10 @@ export default function EventDetails() {
           About The Event
         </h2>
         <p className="text-sm text-white/90 leading-relaxed">
-          Euphoria&rsquo;26 is the Freshers&rsquo; Night, built for this year&rsquo;s incoming
-          batch. Sophomores and seniors are welcome to join too, subject to admin approval
-          during registration.
+          Euphoria&rsquo;26 is Aarambh&rsquo;s Freshers&rsquo; Night &mdash; one big night of
+          music, games, contests, and surprises, built for this year&rsquo;s incoming batch.
+          Sophomores and seniors are welcome to join too, subject to admin approval during
+          registration.
         </p>
       </motion.div>
 
@@ -173,14 +164,15 @@ export default function EventDetails() {
           What&rsquo;s There
         </h2>
         <div className="grid grid-cols-2 gap-3">
-          <div className="chrome-border rounded-xl p-4 flex flex-col items-center gap-2 text-center">
-            <StoreIcon />
-            <span className="text-xs">PebbleCo Store</span>
-          </div>
-          <div className="chrome-border rounded-xl p-4 flex flex-col items-center gap-2 text-center">
-            <CameraIcon />
-            <span className="text-xs">Photobooth</span>
-          </div>
+          {ACTIVITIES.map((a) => (
+            <div
+              key={a.label}
+              className="chrome-border rounded-xl p-4 flex flex-col items-center gap-2 text-center"
+            >
+              <span className="text-xl leading-none">{a.emoji}</span>
+              <span className="text-xs leading-snug">{a.label}</span>
+            </div>
+          ))}
         </div>
       </motion.div>
 
