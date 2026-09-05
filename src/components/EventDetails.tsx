@@ -212,7 +212,7 @@ export default function EventDetails() {
         </div>
         <div className="flex items-center gap-3 text-[var(--muted)]">
           <ClockIcon />
-          <span className="text-white">7:00 PM onwards</span>
+          <span className="text-white">5:30 PM onwards</span>
         </div>
         <a
           href={VENUE_MAP_URL}
