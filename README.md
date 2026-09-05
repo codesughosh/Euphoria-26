@@ -29,7 +29,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=
 These are safe to expose client-side — Firebase web apps are secured by Firestore Security Rules ([`firestore.rules`](firestore.rules)), not by hiding the config.
 
 ## 3. Payment QR
-Replace [`public/payment-qr.png`](public/payment-qr.png) (currently a placeholder) with your real UPI/payment QR image, same filename. Update the prices in [`src/components/EntryTypeSelector.tsx`](src/components/EntryTypeSelector.tsx).
+The real UPI payment QR lives at [`public/payment-qr.jpeg`](public/payment-qr.jpeg). Prices are set in [`src/components/EntryTypeSelector.tsx`](src/components/EntryTypeSelector.tsx).
 
 ## 4. Make yourself admin
 Sign up once through the app (pick 1st year so your own account isn't gated), then in **Firestore → Data → profiles → `<your uid>`**, edit the `isAdmin` field to `true` (find your uid under **Authentication → Users**).

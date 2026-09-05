@@ -167,7 +167,7 @@ export default function BookForm() {
         className="chrome-border rounded-2xl p-4 flex flex-col items-center gap-3 mb-8"
       >
         <Image
-          src="/payment-qr.png"
+          src="/payment-qr.jpeg"
           alt="Payment QR code"
           width={260}
           height={260}
