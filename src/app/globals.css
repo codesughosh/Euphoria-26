@@ -44,6 +44,8 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  -webkit-text-fill-color: transparent;
+  will-change: background-position;
   animation: chrome-sheen 6s ease-in-out infinite;
 }
 
