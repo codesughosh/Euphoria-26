@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Nav from "@/components/Nav";
 import { AuthProvider } from "@/lib/firebase/AuthProvider";
 import "./globals.css";
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Nav />
           {children}
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );
