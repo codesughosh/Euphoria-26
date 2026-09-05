@@ -1,2 +1,2 @@
-// Placeholder — replace with the real organizer contact number.
-export const CONTACT_PHONE = "+91 00000 00000";
+export const CONTACT_NAME = "Amith";
+export const CONTACT_PHONE = "+91 98453 34440";

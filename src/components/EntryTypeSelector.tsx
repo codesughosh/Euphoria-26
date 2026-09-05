@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import type { EntryType } from "@/lib/types";
 
 const options: { value: EntryType; label: string; price: string }[] = [
-  { value: "stag", label: "Stag", price: "₹XXX" },
-  { value: "couple", label: "Couple", price: "₹XXX" },
+  { value: "stag", label: "Stag", price: "₹950" },
+  { value: "couple", label: "Couple", price: "₹1800" },
 ];
 
 export default function EntryTypeSelector({

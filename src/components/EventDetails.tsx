@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useAuth } from "@/lib/firebase/AuthProvider";
+import { useIsLaunched } from "@/lib/launch";
 import ImageSlideshow from "@/components/ImageSlideshow";
+import Countdown from "@/components/Countdown";
 
 const VENUE_MAP_URL = "https://maps.app.goo.gl/sTkLdmbgoZvm7eWZ8";
 
@@ -65,6 +67,7 @@ function CameraIcon() {
 
 export default function EventDetails() {
   const { user } = useAuth();
+  const launched = useIsLaunched();
   const ctaHref = user ? "/book" : "/signup";
 
   return (
@@ -107,6 +110,17 @@ export default function EventDetails() {
       >
         Euphoria&rsquo;26 &mdash; Freshers&rsquo; Night
       </motion.h1>
+
+      {!launched && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.25, duration: 0.5 }}
+          className="chrome-border rounded-2xl p-5 mt-6"
+        >
+          <Countdown />
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -181,16 +195,22 @@ export default function EventDetails() {
             <p className="text-[10px] uppercase tracking-wide text-[var(--muted)]">
               Stag / Couple
             </p>
-            <p className="text-sm font-medium">₹XXX onwards</p>
+            <p className="text-sm font-medium">₹950 onwards</p>
           </div>
-          <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
-            <Link
-              href={ctaHref}
-              className="chrome-btn inline-block rounded-xl px-8 py-3 text-sm uppercase tracking-wide"
-            >
-              Register Now
-            </Link>
-          </motion.div>
+          {launched ? (
+            <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+              <Link
+                href={ctaHref}
+                className="chrome-btn inline-block rounded-xl px-8 py-3 text-sm uppercase tracking-wide"
+              >
+                Register Now
+              </Link>
+            </motion.div>
+          ) : (
+            <span className="chrome-border rounded-xl px-8 py-3 text-sm uppercase tracking-wide text-[var(--muted)] opacity-60 cursor-not-allowed select-none">
+              Opens Soon
+            </span>
+          )}
         </div>
       </motion.div>
     </main>

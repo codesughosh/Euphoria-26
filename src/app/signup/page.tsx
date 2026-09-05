@@ -11,6 +11,7 @@ import FormInput from "@/components/FormInput";
 import FormSelect from "@/components/FormSelect";
 import PasswordInput from "@/components/PasswordInput";
 import ChromeButton from "@/components/ChromeButton";
+import LaunchGate from "@/components/LaunchGate";
 import type { Year } from "@/lib/types";
 
 const YEAR_OPTIONS = [
@@ -73,35 +74,37 @@ export default function SignupPage() {
   }
 
   return (
-    <PageShell>
-      <h2 className="chrome-text text-2xl font-semibold text-center mb-8">
-        Create Account
-      </h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <FormInput id="name" name="name" label="Full Name" required autoComplete="name" />
-        <FormInput id="phone" name="phone" label="Phone Number" required autoComplete="tel" />
-        <FormInput id="usn" name="usn" label="USN" required autoComplete="off" />
-        <FormSelect id="year" name="year" label="Year" required options={YEAR_OPTIONS} />
-        <FormInput id="email" name="email" type="email" label="Email" required autoComplete="email" />
-        <PasswordInput
-          id="password"
-          name="password"
-          label="Password"
-          required
-          minLength={6}
-          autoComplete="new-password"
-        />
-        {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
-        <ChromeButton type="submit" loading={pending} className="mt-2">
-          Sign Up
-        </ChromeButton>
-      </form>
-      <p className="text-center text-xs text-[var(--muted)] mt-6">
-        Already have an account?{" "}
-        <Link href="/login" className="text-white underline">
-          Log in
-        </Link>
-      </p>
-    </PageShell>
+    <LaunchGate message="Registration isn't open yet. Check back when the countdown ends.">
+      <PageShell>
+        <h2 className="chrome-text text-2xl font-semibold text-center mb-8">
+          Create Account
+        </h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <FormInput id="name" name="name" label="Full Name" required autoComplete="name" />
+          <FormInput id="phone" name="phone" label="Phone Number" required autoComplete="tel" />
+          <FormInput id="usn" name="usn" label="USN" required autoComplete="off" />
+          <FormSelect id="year" name="year" label="Year" required options={YEAR_OPTIONS} />
+          <FormInput id="email" name="email" type="email" label="Email" required autoComplete="email" />
+          <PasswordInput
+            id="password"
+            name="password"
+            label="Password"
+            required
+            minLength={6}
+            autoComplete="new-password"
+          />
+          {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
+          <ChromeButton type="submit" loading={pending} className="mt-2">
+            Sign Up
+          </ChromeButton>
+        </form>
+        <p className="text-center text-xs text-[var(--muted)] mt-6">
+          Already have an account?{" "}
+          <Link href="/login" className="text-white underline">
+            Log in
+          </Link>
+        </p>
+      </PageShell>
+    </LaunchGate>
   );
 }

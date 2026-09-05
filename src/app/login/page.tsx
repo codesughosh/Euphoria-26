@@ -9,6 +9,7 @@ import PageShell from "@/components/PageShell";
 import FormInput from "@/components/FormInput";
 import PasswordInput from "@/components/PasswordInput";
 import ChromeButton from "@/components/ChromeButton";
+import LaunchGate from "@/components/LaunchGate";
 
 function friendlyError(code: string) {
   if (code.includes("invalid-credential") || code.includes("wrong-password") || code.includes("user-not-found")) {
@@ -48,30 +49,32 @@ export default function LoginPage() {
   }
 
   return (
-    <PageShell>
-      <h2 className="chrome-text text-2xl font-semibold text-center mb-8">
-        Welcome Back
-      </h2>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <FormInput id="email" name="email" type="email" label="Email" required autoComplete="email" />
-        <PasswordInput
-          id="password"
-          name="password"
-          label="Password"
-          required
-          autoComplete="current-password"
-        />
-        {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
-        <ChromeButton type="submit" loading={pending} className="mt-2">
-          Log In
-        </ChromeButton>
-      </form>
-      <p className="text-center text-xs text-[var(--muted)] mt-6">
-        New here?{" "}
-        <Link href="/signup" className="text-white underline">
-          Create an account
-        </Link>
-      </p>
-    </PageShell>
+    <LaunchGate message="Login isn't open yet. Check back when the countdown ends.">
+      <PageShell>
+        <h2 className="chrome-text text-2xl font-semibold text-center mb-8">
+          Welcome Back
+        </h2>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <FormInput id="email" name="email" type="email" label="Email" required autoComplete="email" />
+          <PasswordInput
+            id="password"
+            name="password"
+            label="Password"
+            required
+            autoComplete="current-password"
+          />
+          {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
+          <ChromeButton type="submit" loading={pending} className="mt-2">
+            Log In
+          </ChromeButton>
+        </form>
+        <p className="text-center text-xs text-[var(--muted)] mt-6">
+          New here?{" "}
+          <Link href="/signup" className="text-white underline">
+            Create an account
+          </Link>
+        </p>
+      </PageShell>
+    </LaunchGate>
   );
 }

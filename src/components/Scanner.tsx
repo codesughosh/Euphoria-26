@@ -53,7 +53,13 @@ export default function Scanner() {
       try {
         await scanner.start(
           { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 240, height: 240 } },
+          {
+            fps: 10,
+            qrbox: (viewfinderWidth, viewfinderHeight) => {
+              const size = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.7);
+              return { width: size, height: size };
+            },
+          },
           async (decodedText) => {
             if (busyRef.current) return;
             busyRef.current = true;

@@ -106,3 +106,11 @@ input:focus, select:focus {
   outline: none;
   border-color: var(--chrome-2);
 }
+
+/* html5-qrcode injects its own <video>; force it to fill and crop to
+   the square container instead of rendering at its native aspect ratio. */
+#qr-reader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}

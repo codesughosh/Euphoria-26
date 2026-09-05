@@ -28,6 +28,12 @@ service cloud.firestore {
         (entryType != 'couple' || isValidAttendee(attendees[1]));
     }
 
+    // Registration opens 2026-09-07 19:00 IST — kept in sync with
+    // src/lib/launch.ts's LAUNCH_AT constant.
+    function isLaunched() {
+      return request.time.toMillis() >= 1788787800000;
+    }
+
     match /profiles/{uid} {
       allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin());
 
@@ -58,6 +64,7 @@ service cloud.firestore {
       allow read: if isSignedIn() && (resource.data.userId == request.auth.uid || isAdmin());
 
       allow create: if isSignedIn() &&
+        isLaunched() &&
         request.resource.data.userId == request.auth.uid &&
         request.resource.data.status == 'pending' &&
         request.resource.data.entryType in ['stag', 'couple'] &&
