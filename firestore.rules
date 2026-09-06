@@ -28,10 +28,10 @@ service cloud.firestore {
         (entryType != 'couple' || isValidAttendee(attendees[1]));
     }
 
-    // Registration opens 2026-09-07 19:00 IST — kept in sync with
+    // Registration opens 2026-09-07 19:30 IST — kept in sync with
     // src/lib/launch.ts's LAUNCH_AT constant.
     function isLaunched() {
-      return request.time.toMillis() >= 1788787800000;
+      return request.time.toMillis() >= 1788789600000;
     }
 
     match /profiles/{uid} {

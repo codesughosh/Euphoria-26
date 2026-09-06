@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-export const LAUNCH_AT = new Date("2026-09-07T19:00:00+05:30").getTime();
+export const LAUNCH_AT = new Date("2026-09-07T19:30:00+05:30").getTime();
 
 export interface Remaining {
   diff: number;
