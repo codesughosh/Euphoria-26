@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { TERMS_CONTENT } from "@/lib/termsContent";
+import { TERMS_INTRO, TERMS_SECTIONS, TERMS_TITLE } from "@/lib/termsContent";
 
 const noopSubscribe = () => () => {};
 
@@ -37,14 +37,24 @@ export default function TermsModal({
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.25 }}
             onClick={(e) => e.stopPropagation()}
-            className="chrome-border rounded-2xl w-full max-w-sm max-h-[70vh] overflow-y-auto p-6 bg-[var(--surface)]"
+            className="chrome-border rounded-2xl w-full max-w-sm max-h-[80vh] overflow-y-auto p-6 bg-[var(--surface)]"
           >
-            <h3 className="chrome-text text-lg font-semibold mb-4">
-              Terms &amp; Conditions
-            </h3>
-            <div className="space-y-3 text-xs text-[var(--muted)] leading-relaxed">
-              {TERMS_CONTENT.map((para, i) => (
-                <p key={i}>{para}</p>
+            <h3 className="chrome-text text-lg font-semibold mb-3">{TERMS_TITLE}</h3>
+            <p className="text-xs text-[var(--muted)] leading-relaxed mb-4">{TERMS_INTRO}</p>
+            <div className="space-y-4">
+              {TERMS_SECTIONS.map((section) => (
+                <div key={section.heading}>
+                  <h4 className="text-xs font-semibold text-white uppercase tracking-wide mb-1.5">
+                    {section.heading}
+                  </h4>
+                  <div className="space-y-1.5">
+                    {section.body.map((para, i) => (
+                      <p key={i} className="text-xs text-[var(--muted)] leading-relaxed">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
             <button

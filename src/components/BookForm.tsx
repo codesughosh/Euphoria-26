@@ -19,7 +19,6 @@ import FormInput from "@/components/FormInput";
 import ChromeButton from "@/components/ChromeButton";
 import EntryTypeSelector from "@/components/EntryTypeSelector";
 import AttendeeFields from "@/components/AttendeeFields";
-import TermsModal from "@/components/TermsModal";
 import type { EntryType } from "@/lib/types";
 
 const ACTIVE_STATUSES = ["pending", "verified", "checked_in"];
@@ -30,8 +29,7 @@ export default function BookForm() {
   const [checking, setChecking] = useState(true);
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
-  const [agreed, setAgreed] = useState(false);
-  const [termsOpen, setTermsOpen] = useState(false);
+  const [nonRefundableAck, setNonRefundableAck] = useState(false);
 
   const [entryType, setEntryType] = useState<EntryType | null>(null);
   const [attendee1Name, setAttendee1Name] = useState(profile?.name ?? "");
@@ -80,8 +78,8 @@ export default function BookForm() {
       setError("Enter your transaction ID.");
       return;
     }
-    if (!agreed) {
-      setError("You must agree to the Terms & Conditions.");
+    if (!nonRefundableAck) {
+      setError("You must confirm this payment is non-refundable and cannot be cancelled.");
       return;
     }
 
@@ -197,32 +195,27 @@ export default function BookForm() {
           required
           autoComplete="off"
         />
-        <label className="flex items-start gap-2.5 text-xs text-[var(--muted)]">
-          <input
-            type="checkbox"
-            checked={agreed}
-            onChange={(e) => setAgreed(e.target.checked)}
-            className="mt-0.5 accent-white"
-          />
-          <span>
-            I agree to the{" "}
-            <button
-              type="button"
-              onClick={() => setTermsOpen(true)}
-              className="text-white underline underline-offset-2"
-            >
-              Terms &amp; Conditions
-            </button>
-          </span>
-        </label>
+        <div className="chrome-border rounded-xl p-4">
+          <p className="text-xs text-[var(--muted)] leading-relaxed mb-3">
+            This payment is <span className="text-white font-medium">non-refundable</span> and{" "}
+            <span className="text-white font-medium">cannot be cancelled</span> once submitted.
+          </p>
+          <label className="flex items-start gap-2.5 text-xs text-[var(--muted)]">
+            <input
+              type="checkbox"
+              checked={nonRefundableAck}
+              onChange={(e) => setNonRefundableAck(e.target.checked)}
+              className="mt-0.5 accent-white"
+            />
+            <span>I understand and accept this.</span>
+          </label>
+        </div>
 
         {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
-        <ChromeButton type="submit" loading={pending} disabled={!agreed}>
+        <ChromeButton type="submit" loading={pending} disabled={!nonRefundableAck}>
           Submit for Verification
         </ChromeButton>
       </form>
-
-      <TermsModal open={termsOpen} onClose={() => setTermsOpen(false)} />
     </PageShell>
   );
 }

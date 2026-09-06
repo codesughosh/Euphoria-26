@@ -12,6 +12,7 @@ import FormSelect from "@/components/FormSelect";
 import PasswordInput from "@/components/PasswordInput";
 import ChromeButton from "@/components/ChromeButton";
 import LaunchGate from "@/components/LaunchGate";
+import TermsModal from "@/components/TermsModal";
 import type { Year } from "@/lib/types";
 
 const YEAR_OPTIONS = [
@@ -31,6 +32,8 @@ export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,6 +52,10 @@ export default function SignupPage() {
     }
     if (year !== "1st" && year !== "2nd" && year !== "3rd") {
       setError("Select your year.");
+      return;
+    }
+    if (!agreed) {
+      setError("You must confirm you have read the Terms & Conditions.");
       return;
     }
 
@@ -93,8 +100,28 @@ export default function SignupPage() {
             minLength={6}
             autoComplete="new-password"
           />
+
+          <label className="flex items-start gap-2.5 text-xs text-[var(--muted)]">
+            <input
+              type="checkbox"
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
+              className="mt-0.5 accent-white"
+            />
+            <span>
+              I have read the{" "}
+              <button
+                type="button"
+                onClick={() => setTermsOpen(true)}
+                className="text-white underline underline-offset-2"
+              >
+                Terms &amp; Conditions
+              </button>
+            </span>
+          </label>
+
           {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
-          <ChromeButton type="submit" loading={pending} className="mt-2">
+          <ChromeButton type="submit" loading={pending} disabled={!agreed} className="mt-2">
             Sign Up
           </ChromeButton>
         </form>
@@ -105,6 +132,8 @@ export default function SignupPage() {
           </Link>
         </p>
       </PageShell>
+
+      <TermsModal open={termsOpen} onClose={() => setTermsOpen(false)} />
     </LaunchGate>
   );
 }
